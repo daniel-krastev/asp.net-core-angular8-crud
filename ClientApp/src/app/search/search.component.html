@@ -1,0 +1,55 @@
+<div class="container">
+  <h2>Search</h2>
+
+  <form [formGroup]="searchForm" #formDir="ngForm">
+    <div class="form-group">
+      <label for="loanID">By ID:</label>
+      <input class="form-control" id="loanID" placeholder="Loan ID" formControlName="searchID" />
+      <div class="alert alert-danger" *ngIf="searchID.invalid && (searchID.dirty || searchID.touched)">
+        <div *ngIf="!!searchID.errors?.required">
+          Loan ID is required.
+        </div>
+        <div *ngIf="!!searchID.errors?.pattern">
+          Loan ID should be a number.
+        </div>
+      </div>
+      <div *ngIf="notFound" class="alert alert-warning">
+        Item not found!
+      </div>
+      <button class="btn btn-secondary  mt-2" [disabled]="!searchForm.valid" (click)="getLoan()">
+        Fetch
+      </button>
+    </div>
+
+    <button class="btn btn-secondary mr-3 mt-3" (click)="getLoans(); formDir.resetForm({})">
+      Show All
+    </button>
+    <button class="btn btn-secondary ml-3 mt-3" (click)="clear(); formDir.resetForm({})">
+      Clear
+    </button>
+  </form>
+</div>
+
+<div class="container mt-5" [hidden]="loans.length == 0">
+  <h4>Loans</h4>
+  <table class="table table-hover">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Borrower Name</th>
+        <th>Funding Amoung</th>
+        <th>Repayment Amount</th>
+        <th>Delete</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let loan of loans">
+        <td>{{loan.id}}</td>
+        <td>{{loan.borrowerName}}</td>
+        <td>{{loan.fundingAmount}}</td>
+        <td>{{loan.repaymentAmount}}</td>
+        <td><button class="btn btn-secondary" (click)="delete(loan)">&times;</button></td>
+      </tr>
+    </tbody>
+  </table>
+</div>

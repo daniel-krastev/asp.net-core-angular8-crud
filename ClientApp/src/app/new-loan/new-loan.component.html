@@ -1,0 +1,58 @@
+<div class="container">
+  <h2>New</h2>
+
+  <form [formGroup]="addForm" #formDir="ngForm">
+    <div class="form-group">
+      <label for="borrName">Borrower Name:</label>
+      <input class="form-control" id="borrName" type="text" formControlName="borrName" required>
+
+      <div class="alert alert-danger" *ngIf="borrName.invalid && (borrName.dirty || borrName.touched)">
+        <div *ngIf="!!borrName.errors?.required">
+          Borrower Name is required.
+        </div>
+        <div *ngIf="!!borrName.errors?.minlength">
+          Borrower Name must be at least 4 characters long.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="fund">Funding Amount:</label>
+      <input class="form-control" id="fund" type="number" formControlName="fund" required>
+      <div class="alert alert-danger" *ngIf="fund.invalid && (fund.dirty || fund.touched)">
+        <div *ngIf="!!fund.errors?.required">
+          Funding amount is required.
+        </div>
+        <div *ngIf="!!fund.errors?.min">
+          Funding amount must be more than 0.1.
+        </div>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <label for="rep">Repayment Amount:</label>
+      <input class="form-control" id="rep" type="number" formControlName="rep" required>
+      <div class="alert alert-danger" *ngIf="rep.invalid && (rep.dirty || rep.touched)">
+        <div *ngIf="!!rep.errors?.required">
+          Repayment amount is required.
+        </div>
+        <div *ngIf="!!rep.errors?.min">
+          Repayment amount must be more than 0.1.
+        </div>
+      </div>
+      <div class="alert alert-danger" *ngIf="!!addForm.errors?.opositeAmount && rep.dirty && fund.dirty">
+        The repayment amount cannot be less than the funding amount.
+      </div>
+    </div>
+
+
+
+    <button class="btn btn-secondary mr-3" [disabled]="!addForm.valid"
+      (click)="add(); formDir.resetForm({})">Add</button>
+    <button class="btn btn-secondary ml-3" type="button" (click)="formDir.resetForm({}); sent = false;">Clear</button>
+  </form>
+
+  <div>
+    <div *ngIf="sent" class="alert alert-success mt-3">Loan added successfully!</div>
+  </div>
+</div>
